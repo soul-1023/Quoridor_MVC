@@ -43,7 +43,7 @@ namespace Quoridor_MVC.Models
             //}
         }
 
-        public IVertex this[int x, int y]
+        public AbstractVertex this[int x, int y]
         {
             get => Vertexes[x, y];
         }
