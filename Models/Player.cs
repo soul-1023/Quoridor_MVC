@@ -2,11 +2,11 @@
 {
     class Player : AbstractCharacter
     {
-        public Player(string name,)
+        public Player(string name, Coords coords)
         {
-            Name = 
+            Name = name;
+            CurrentPosition = coords;
         }
-
 
         public override void Move(Coords coords)
         {
