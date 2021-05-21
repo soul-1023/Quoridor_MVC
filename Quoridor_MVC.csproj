@@ -74,7 +74,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\AbstractVertex.cs" />
+    <Compile Include="Models\IVertex.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Vertex.cs" />
     <Compile Include="Models\Graph.cs" />

@@ -5,8 +5,6 @@ namespace Quoridor_MVC.Models
 {
     sealed class Graph : AbstractGraph
     {
-        private new AbstractVertex[,] Vertexes { get; set; }
-
         public Graph(int size)
         {
             Vertexes = new Vertex[size, size];
@@ -45,7 +43,7 @@ namespace Quoridor_MVC.Models
             //}
         }
 
-        public Vertex this[int x, int y]
+        public IVertex this[int x, int y]
         {
             get => Vertexes[x, y];
         }
