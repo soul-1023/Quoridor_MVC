@@ -31,7 +31,7 @@ namespace Quoridor_MVC.Models
             Coords LeftElem = y != 0 ? new Coords(x, y - 1) : null;
             Coords RightElem = y != size - 1 ? new Coords(x, y + 1) : null;
             Coords[] AroundElems = { TopElem, DownElem, LeftElem, RightElem };
-
+            //выдаёт nullException
             AroundElems.Where(e => !e.Equals(null)).ToList().ForEach(e => this[y, x].Edges.Add(e));
         }
 
