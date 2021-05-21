@@ -1,6 +1,6 @@
-﻿
+﻿using Quoridor_MVC.Models;
 
-namespace Quoridor_MVC.Models
+namespace Quoridor_MVC.Controllers
 {
     interface IGraphController
     {

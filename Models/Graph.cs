@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 
 namespace Quoridor_MVC.Models
 {
     sealed class Graph : AbstractGraph
     {
-        public override Vertex[,] Vertexes { get; set; }
+        private new Vertex[,] Vertexes { get; set; }
 
         public Graph(int size)
         {
@@ -19,8 +18,6 @@ namespace Quoridor_MVC.Models
         {
             Vertex[][] vertexes = (Vertex[][])Enumerable.Range(0, 8)
                 .Select((_) => (new Vertex[8]).Select((_e) => new Vertex())).ToArray();
-
-            Console.WriteLine(vertexes);
 
             //for (int y = 0; y < size; y++)
             //{
@@ -46,6 +43,11 @@ namespace Quoridor_MVC.Models
             //        }
             //    }
             //}
+        }
+
+        public Vertex this[int x, int y]
+        {
+            get => Vertexes[x, y];
         }
     }
 }

@@ -4,7 +4,8 @@ namespace Quoridor_MVC.Models
 {
     abstract class AbstractVertex
     {
-        public abstract List<Coords> Edges { get; set; }
-        public abstract bool IsCharacter { get; set; }
+        public List<Coords> Edges { get; set; }
+
+        public bool IsCharacter { get; set; }
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Quoridor_MVC.Models
 {
-    class Vertex : AbstractVertex
+    sealed class Vertex : AbstractVertex
     {
-        public override List<Coords> Edges { get; set; }
-        public override bool IsCharacter { get; set; }
+        public new List<Coords> Edges { get; set; }
+
+        public new bool IsCharacter { get; set; }
 
         public Vertex()
         {

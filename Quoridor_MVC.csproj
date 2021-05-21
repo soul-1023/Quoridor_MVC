@@ -61,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AbstractGameActivities.cs" />
+    <Compile Include="Controllers\IActivitiesChecker.cs" />
+    <Compile Include="Controllers\ICharactersManager.cs" />
+    <Compile Include="Models\AbstractAI.cs" />
+    <Compile Include="Models\AbstractCharacter.cs" />
+    <Compile Include="Models\AI.cs" />
     <Compile Include="Models\Coords.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -69,9 +75,10 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AbstractVertex.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Vertex.cs" />
     <Compile Include="Models\Graph.cs" />
-    <Compile Include="Controlles\IGraphController.cs" />
+    <Compile Include="Controllers\IGraphController.cs" />
     <Compile Include="Models\AbstractGraph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
