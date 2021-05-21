@@ -2,7 +2,7 @@
 {
     abstract class AbstractGraph
     {
-        protected Vertex[,] Vertexes { get; set; }
+        public Vertex[,] Vertexes { get; set; }
 
         protected abstract void FillGraph(int size);
     }
