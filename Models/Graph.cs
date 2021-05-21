@@ -14,38 +14,31 @@ namespace Quoridor_MVC.Models
 
         protected override void FillGraph(int size)
         {
-            Vertex[][] vertexes = (Vertex[][])Enumerable.Range(0, 8)
-                .Select((_) => (new Vertex[8]).Select((_e) => new Vertex())).ToArray();
-
-            //for (int y = 0; y < size; y++)
-            //{
-            //    for (int x = 0; x < size; x++)
-            //    {
-            //        Vertexes[x, y] = new Vertex();
-
-            //        if (x != 0)
-            //        {
-            //            Vertexes[x, y].Edges.Add(new Coords(x - 1, y));
-            //        }
-            //        if (x != size - 1)
-            //        {
-            //            Vertexes[x, y].Edges.Add(new Coords(x + 1, y));
-            //        }
-            //        if (y != 0)
-            //        {
-            //            Vertexes[x, y].Edges.Add(new Coords(x, y - 1));
-            //        }
-            //        if (y != size - 1)
-            //        {
-            //            Vertexes[x, y].Edges.Add(new Coords(x, y + 1));
-            //        }
-            //    }
-            //}
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    this[y, x] = new Vertex();
+                    SetVertexEdges(y, x, size);
+                }
+            }
         }
 
-        public AbstractVertex this[int x, int y]
+        private void SetVertexEdges(int y, int x, int size)
         {
-            get => Vertexes[x, y];
+            Coords TopElem = x != 0 ? new Coords(x - 1, y) : null;
+            Coords DownElem = x != size - 1 ? new Coords(x + 1, y) : null;
+            Coords LeftElem = y != 0 ? new Coords(x, y - 1) : null;
+            Coords RightElem = y != size - 1 ? new Coords(x, y + 1) : null;
+            Coords[] AroundElems = { TopElem, DownElem, LeftElem, RightElem };
+
+            AroundElems.Where(e => !e.Equals(null)).ToList().ForEach(e => this[y, x].Edges.Add(e));
+        }
+
+        public AbstractVertex this[int y, int x]
+        {
+            get => Vertexes[y, x];
+            private set => Vertexes[y, x] = value;
         }
     }
 }
