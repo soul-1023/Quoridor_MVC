@@ -1,5 +1,5 @@
-﻿using System.Linq;
-
+﻿using System;
+using System.Linq;
 
 namespace Quoridor_MVC.Models
 {
@@ -31,8 +31,8 @@ namespace Quoridor_MVC.Models
             Coords LeftElem = y != 0 ? new Coords(x, y - 1) : null;
             Coords RightElem = y != size - 1 ? new Coords(x, y + 1) : null;
             Coords[] AroundElems = { TopElem, DownElem, LeftElem, RightElem };
-            //выдаёт nullException
-            AroundElems.Where(e => !e.Equals(null)).ToList().ForEach(e => this[y, x].Edges.Add(e));
+
+            AroundElems.Where(e => e != null).ToList().ForEach(e => this[y, x].Edges.Add(e));
         }
 
         public AbstractVertex this[int y, int x]

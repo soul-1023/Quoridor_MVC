@@ -10,6 +10,9 @@
 
         public override void Move(Coords coords) => CurrentPosition = coords;
 
-        public override void SpendWall() => Walls--;
+        public override void SpendWall()
+        {
+            if (Walls != 0) Walls--;
+        }
     }
 }
