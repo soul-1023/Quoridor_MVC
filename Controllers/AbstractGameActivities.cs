@@ -6,7 +6,7 @@
 
         IActivitiesChecker ActivitiesChecker { get; set; }
 
-        ICharactersManager CharactersManager { get; set; }
+        AbstractCharactersManager CharactersManager { get; set; }
 
         public abstract bool PlaceWall();
     }
