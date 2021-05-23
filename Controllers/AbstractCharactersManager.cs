@@ -1,5 +1,6 @@
 ﻿using Quoridor_MVC.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,9 +8,9 @@ namespace Quoridor_MVC.Controllers
 {
     abstract class AbstractCharactersManager
     {
-        public AbstractCharacter[] Characters { get; protected set; }
+        public List<AbstractCharacter> Characters { get; protected set; }
 
-        public Dictionary<AbstractCharacter, Coords[]> WinPositions;
+        public Dictionary<AbstractCharacter, Coords[]> WinPositions { get; protected set; }
 
         protected Coords[] SetWinningSide(Coords startPositionOfCharacter, int sizeOfGraphSide)
         {
@@ -39,19 +40,56 @@ namespace Quoridor_MVC.Controllers
             return null;
         }
 
+        //Протестировать
         public void MixPlayers()
         {
-            
+            Random rnd = new Random();
+            int countOfCharactersInGame = Characters.Count;
+            int idCurrentCharacter = 0;
+
+            AbstractCharacter[] mixedCharacters = new AbstractCharacter[countOfCharactersInGame];
+
+            while(mixedCharacters.Contains(null))
+            {
+                AbstractCharacter chooseCharacter = Characters[rnd.Next(0, countOfCharactersInGame)];
+
+                if (!mixedCharacters.Contains(chooseCharacter))
+                {
+                    mixedCharacters[idCurrentCharacter] = chooseCharacter;
+                    idCurrentCharacter++;
+                }
+                    
+            }
+
+            Characters = mixedCharacters.ToList();
         }
 
-        protected abstract AbstractCharactersManager SwitchTurn();
+        public void SwitchTurn()
+        {
+            AbstractCharacter firstCharacter = GetActiveCharacter();
 
-        protected abstract AbstractCharacter GetActiveCharacter();
+            Characters.Remove(firstCharacter);
+            Characters.Add(firstCharacter);
+        }
+
+        protected AbstractCharacter GetActiveCharacter() => Characters[0];
 
         protected abstract bool MoveCharacter(AbstractGraph graph, params Coords[] coords);
 
-        protected abstract bool CreatePlayer(string name, Coords startPosition);
+        public void CreatePlayer(string name, Coords startPosition)
+        {
+            if (Characters.Count < 5)
+                Characters.Add(new Player(name, startPosition));
+            else
+                throw new Exception("Количество игроков не может быть больше четырёх");
+        }
 
-        protected abstract bool CreateAI(string name, Coords startPosition);
+        public void CreateAI(string name, Coords startPosition)
+        {
+            if (Characters.Count < 5)
+                Characters.Add(new AI(name, startPosition));
+            else
+                throw new Exception("Количество игроков не может быть больше четырёх");
+        }
     }
 }

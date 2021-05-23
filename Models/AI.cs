@@ -7,6 +7,12 @@ namespace Quoridor_MVC.Models
     {
         private bool[,] AdjacencyMatrix;
 
+        public AI(string name, Coords currentPosition)
+        {
+            Name = name;
+            CurrentPosition = currentPosition;
+        }
+
         public void InitAdjacencyMatrix(AbstractGraph graph)
         {
             int numOfElemsInMatrixRow = graph.Vertexes.GetLength(0);
