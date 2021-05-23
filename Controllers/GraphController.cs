@@ -5,7 +5,7 @@ namespace Quoridor_MVC.Controllers
 {
     class GraphController : IGraphController
     {
-        public void AddLinks(Graph graph, Coords characterPostition, params Coords[] potentialPos)
+        public void AddLinks(AbstractGraph graph, Coords characterPostition, params Coords[] potentialPos)
         {
             foreach (Coords coords in potentialPos)
             {
@@ -14,7 +14,7 @@ namespace Quoridor_MVC.Controllers
             }
         }
 
-        public void RemoveLinks(Graph graph, params (Coords, Coords)[] linkedCoords)
+        public void RemoveLinks(AbstractGraph graph, params (Coords, Coords)[] linkedCoords)
         {
             foreach ((Coords, Coords) coordsPair in linkedCoords)
             {

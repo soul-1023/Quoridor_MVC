@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Quoridor_MVC.Controllers.AbstractCharactersManager">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAEAACAQAAABAAAAAAAAQAAAAAAQgAAAAAAAA=</HashCode>
+      <FileName>Controllers\AbstractCharactersManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Controllers.AbstractGameActivities">
+    <Position X="7.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAIQAAAAAAAAAAAAACAAAAAICAAAAAAAgAAAA=</HashCode>
+      <FileName>Controllers\AbstractGameActivities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Controllers.ActivitiesChecker" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAACAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAEA=</HashCode>
+      <FileName>Controllers\ActivitiesChecker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Quoridor_MVC.Controllers.CharactersManager" Collapsed="true">
+    <Position X="5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\CharactersManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Controllers.GraphController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\GraphController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Quoridor_MVC.Form1" Collapsed="true">
+    <Position X="10.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAADCEAAABAADQEAACCAAIQAARQMCAAAAACWA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Program" Collapsed="true">
+    <Position X="9" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.AbstractAI" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AbstractAI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.AbstractCharacter" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAQAAAQAAAAAAgAAAAAAAACAAAA=</HashCode>
+      <FileName>Models\AbstractCharacter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.AbstractGraph" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AbstractGraph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.AbstractVertex" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQgAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AbstractVertex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.AI" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAgAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.Coords" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Models\Coords.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.Graph">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAACAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.Player" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Models.Vertex" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Vertex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Properties.Resources" Collapsed="true">
+    <Position X="10.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quoridor_MVC.Properties.Settings" Collapsed="true">
+    <Position X="9" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Quoridor_MVC.Controllers.IActivitiesChecker">
+    <Position X="10.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAACAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\IActivitiesChecker.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Quoridor_MVC.Controllers.IGraphController" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\IGraphController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
