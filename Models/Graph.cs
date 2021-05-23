@@ -38,7 +38,7 @@ namespace Quoridor_MVC.Models
         public override AbstractVertex this[int y, int x]
         {
             get => Vertexes[y, x];
-            private set => Vertexes[y, x] = value;
+            protected set => Vertexes[y, x] = value;
         }
     }
 }

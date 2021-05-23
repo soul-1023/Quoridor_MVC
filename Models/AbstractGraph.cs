@@ -6,6 +6,6 @@
 
         protected abstract void FillGraph(int size);
 
-        public abstract AbstractVertex this[int x, int y] { get; set; }
+        public abstract AbstractVertex this[int x, int y] { get; protected set; }
     }
 }
