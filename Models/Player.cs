@@ -7,12 +7,5 @@
             Name = name;
             CurrentPosition = coords;
         }
-
-        public override void Move(Coords coords) => CurrentPosition = coords;
-
-        public override void SpendWall()
-        {
-            if (Walls != 0) Walls--;
-        }
     }
 }

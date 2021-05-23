@@ -6,6 +6,11 @@ namespace Quoridor_MVC.Models
     {
         public List<Coords> Edges { get; set; }
 
-        public bool IsCharacter { get; set; }
+        public bool IsCharacter { get; protected set; }
+
+        public void ToggleIsCharacter()
+        {
+            IsCharacter = !IsCharacter;
+        }
     }
 }

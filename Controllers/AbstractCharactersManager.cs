@@ -74,8 +74,6 @@ namespace Quoridor_MVC.Controllers
 
         protected AbstractCharacter GetActiveCharacter() => Characters[0];
 
-        protected abstract bool MoveCharacter(AbstractGraph graph, params Coords[] coords);
-
         public void CreatePlayer(string name, Coords startPosition)
         {
             if (Characters.Count < 5)

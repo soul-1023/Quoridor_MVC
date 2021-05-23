@@ -35,7 +35,7 @@ namespace Quoridor_MVC.Models
             AroundElems.Where(e => e != null).ToList().ForEach(e => this[y, x].Edges.Add(e));
         }
 
-        public AbstractVertex this[int y, int x]
+        public override AbstractVertex this[int y, int x]
         {
             get => Vertexes[y, x];
             private set => Vertexes[y, x] = value;

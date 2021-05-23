@@ -99,13 +99,5 @@ namespace Quoridor_MVC.Models
 
             return field;
         }
-
-        public override void Move(Coords coords)
-        {
-        }
-
-        public override void SpendWall()
-        {
-        }
     }
 }

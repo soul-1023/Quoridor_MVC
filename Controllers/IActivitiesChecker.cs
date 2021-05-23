@@ -4,11 +4,10 @@ namespace Quoridor_MVC.Controllers
 {
     interface IActivitiesChecker
     {
-        bool CanMove(AbstractGraph graph, params Coords[] coords);
+        bool CanMove(AbstractGraph graph, Coords characterPosition, Coords chosenPosition);
 
-        bool CanPlaceWall(AbstractGraph graph, params Coords[] coords);
+        bool CanPlaceWall(AbstractGraph graph, ((Coords, Coords), (Coords, Coords)) CoordPairs);
 
-        // определиться с аргументами
-        AbstractCharacter DefineWinner();
+        AbstractCharacter DefineWinner(AbstractCharacter character, Coords[] winPoints);
     }
 }

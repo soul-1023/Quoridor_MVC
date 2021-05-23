@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AbstractGameActivities.cs" />
+    <Compile Include="Controllers\ActivitiesChecker.cs" />
     <Compile Include="Controllers\CharactersManager.cs" />
+    <Compile Include="Controllers\GraphController.cs" />
     <Compile Include="Controllers\IActivitiesChecker.cs" />
     <Compile Include="Controllers\AbstractCharactersManager.cs" />
     <Compile Include="Models\AbstractAI.cs" />

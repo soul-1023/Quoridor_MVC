@@ -6,10 +6,13 @@
         
         public string Name { get; protected set; }
 
-        public Coords CurrentPosition { get; set; }
+        public Coords CurrentPosition { get; protected set; }
 
-        public abstract void Move(Coords coords);
+        public void Move(Coords coords) => CurrentPosition = coords;
 
-        public abstract void SpendWall();
+        public void SpendWall()
+        {
+            if (Walls != 0) Walls--;
+        }
     }
 }
