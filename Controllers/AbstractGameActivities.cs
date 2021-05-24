@@ -8,12 +8,8 @@ namespace Quoridor_MVC.Controllers
     abstract class AbstractGameActivities
     {
         IGraphController LinkManager { get; set; }
-
         IActivitiesChecker ActivitiesChecker { get; set; }
-
         AbstractCharactersManager CharactersManager { get; set; }
-
-        public AbstractGraph Graph { get; set; }
 
         public AbstractGameActivities()
         {
@@ -21,6 +17,25 @@ namespace Quoridor_MVC.Controllers
             ActivitiesChecker = new ActivitiesChecker();
             CharactersManager = new CharactersManager();
         }
+
+        public void InitializeSession(int sizeOfField, int charactersQuantity)
+        {
+            Graph = new Graph(sizeOfField);
+            FillByCharacters(charactersQuantity, GetStartCoords(sizeOfField));
+            CharactersManager.MixPlayers();
+            CharactersManager.Characters.ForEach(character =>
+            {
+                CharactersManager.SetWinningSide(character.CurrentPosition, sizeOfField);
+            });
+        }
+
+        public Coords[] getWinPositions(AbstractCharacter character)
+        {
+            return CharactersManager.WinPositions[character];
+        }
+
+        public AbstractGraph Graph { get; private set; }
+
         private Dictionary<string, Coords> GetStartCoords(int graphRowSize)
         {
             Dictionary<string, Coords> startPos = new Dictionary<string, Coords>();
@@ -47,15 +62,8 @@ namespace Quoridor_MVC.Controllers
             return startPos;
         }
        
-        public void InitializeSession(int size, int charactersQuantity)
-        {
-            Graph = new Graph(size);
-            FillByCharacters(charactersQuantity, GetStartCoords(size));
-            CharactersManager.MixPlayers();
-        }
-
         public AbstractCharacter GetActiveCharacter() => CharactersManager.Characters[0];
-
+        
         private void FillByCharacters(int charactersQuantity, Dictionary<string, Coords> startCoords)
         {
             if(charactersQuantity == 2)

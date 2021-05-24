@@ -8,39 +8,38 @@ namespace Quoridor_MVC.Controllers
 {
     abstract class AbstractCharactersManager
     {
+        public AbstractCharactersManager()
+        {
+            Characters = new List<AbstractCharacter>();
+            WinPositions = new Dictionary<AbstractCharacter, Coords[]>();
+        }
+
         public List<AbstractCharacter> Characters { get; protected set; }
 
         public Dictionary<AbstractCharacter, Coords[]> WinPositions { get; protected set; }
 
-        protected Coords[] SetWinningSide(Coords startPositionOfCharacter, int sizeOfGraphSide)
+        public void SetWinningSide(Coords startPositionOfCharacter, int sizeOfGraphSide)
         {
-            Coords[] coords = new Coords[sizeOfGraphSide];
+            Coords[] winningPositions = new Coords[sizeOfGraphSide];
             bool isTopSide = startPositionOfCharacter.y == 0;
             bool isRightSide = startPositionOfCharacter.x == sizeOfGraphSide - 1;
             bool isBottomSide = startPositionOfCharacter.y == sizeOfGraphSide - 1;
             bool isLeftSide = startPositionOfCharacter.x == 0;
 
-            if (isTopSide)
-            {
-                return coords.Select((_, i) => new Coords(i, sizeOfGraphSide - 1)).ToArray();
-            } 
-            else if (isRightSide)
-            {
-                return coords.Select((_, i) => new Coords(0, i)).ToArray();
-            } 
-            else if (isBottomSide)
-            {
-                return coords.Select((_, i) => new Coords(i, 0)).ToArray();
-            } 
-            else if (isLeftSide)
-            {
-                return coords.Select((_, i) => new Coords(sizeOfGraphSide - 1, i)).ToArray();
-            }
+            AbstractCharacter character = Characters
+                .Find(ch => ch.CurrentPosition == startPositionOfCharacter);
 
-            return null;
+            winningPositions = winningPositions.Select((_, i) => {
+                if (isTopSide) return new Coords(i, sizeOfGraphSide - 1);
+                else if (isRightSide) return new Coords(0, i);
+                else if (isBottomSide) return new Coords(i, 0);
+                else if (isLeftSide) return new Coords(sizeOfGraphSide - 1, i);
+                return null;
+            }).ToArray();
+
+            WinPositions.Add(character, winningPositions);
         }
 
-        //Протестировать
         public void MixPlayers()
         {
             Random rnd = new Random();
@@ -76,7 +75,7 @@ namespace Quoridor_MVC.Controllers
 
         public void CreatePlayer(string name, Coords startPosition)
         {
-            if (Characters.Count < 5)
+            if (Characters.Count() < 5)
                 Characters.Add(new Player(name, startPosition));
             else
                 throw new Exception("Количество игроков не может быть больше четырёх");

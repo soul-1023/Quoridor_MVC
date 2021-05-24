@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quoridor_MVC.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,84 +29,7 @@ namespace Quoridor_MVC
 
         private void Start()
         {
-            int count = 1;
-            new System.Windows.Forms.Padding(0);
-            tableLayoutPanel1.RowCount = (2 * graph.Vertexes.GetLength(1)) - 1;
-            tableLayoutPanel1.ColumnCount = (2 * graph.Vertexes.GetLength(0)) - 1;
-            tableLayoutPanel1.BackColor = Color.Black;
-            for (int i = 0; i < tableLayoutPanel1.RowCount; i = i + 2)
-            {
-                for (int j = 0; j < tableLayoutPanel1.ColumnCount; j = j + 2)
-                {
-                    Label label = new Label();
-                    tableLayoutPanel1.Controls.Add(label, i, j);
-                    label.BackColor = Color.White;
-                    label.Dock = DockStyle.Fill;
-                    label.Height = 60;
-                    label.Width = 60;
-                    label.Margin = Padding;
-                    label.Click += (s, e) => label_Click_vertex(label);
-                    label.MouseEnter += (s, e) => label_mouse_enter_vertex(label);
-                    label.MouseLeave += (s, e) => label_mouse_leave_vertex(label);
-                    vertexLabelList.Add(label);
-                }
-            }
-            for (int j = 1; j < tableLayoutPanel1.RowCount; j = j + 2)
-            {
-                for (int i = 0; i < tableLayoutPanel1.ColumnCount; i = i + 2)
-                {
-                    Label label = new Label();
-                    tableLayoutPanel1.Controls.Add(label, i, j);
-                    label.BackColor = Color.Gray;
-                    label.Dock = DockStyle.Fill;
-                    label.Width = 20;
-                    label.Height = 20;
-                    label.Margin = Padding;
-                    horizontalLabelList.Add(label);
-
-                    label.Click += (s, e) => label_Click_wall(label);
-                    label.MouseEnter += (s, e) => label_mouse_enter_wall(label);
-                    label.MouseLeave += (s, e) => label_mouse_leave_wall(label);
-                }
-            }
-            for (int i = 1; i < tableLayoutPanel1.RowCount; i = i + 2)
-            {
-                for (int j = 0; j < tableLayoutPanel1.ColumnCount; j = j + 2)
-                {
-                    Label label = new Label();
-                    tableLayoutPanel1.Controls.Add(label, i, j);
-                    label.BackColor = Color.Gray;
-                    label.Dock = DockStyle.Fill;
-                    label.Width = 20;
-                    label.Margin = Padding;
-                    verticalLabelList.Add(label);
-
-                    label.Click += (s, e) => label_Click_wall(label);
-                    label.MouseEnter += (s, e) => label_mouse_enter_wall(label);
-                    label.MouseLeave += (s, e) => label_mouse_leave_wall(label);
-                }
-            }
-            //for (int i = 1; i < tableLayoutPanel1.RowCount; i = i + 2)
-            //{
-            //    for (int j = 1; j < tableLayoutPanel1.ColumnCount; j = j + 2)
-            //    {
-            //        Label label = new Label();
-            //        tableLayoutPanel1.Controls.Add(label, i, j);
-            //        label.BackColor = Color.Gray;
-            //        label.Dock = DockStyle.Fill;
-            //        label.Width = 20;
-            //        label.Height = 20;
-            //        label.Margin = Padding;
-            //        //label1.Text = Convert.ToString(count);
-            //        verticalLabelList.Insert(count, label);
-            //        count += 2;
-            //    }
-            //    count++;
-            //}
-            //for (int i = 0; i < verticalLabelList.Count; i++)
-            //{
-            //    verticalLabelList[i].Text = Convert.ToString(i);
-            //}
+            Game game = new Game(tableLayoutPanel1, 8, 2);
         }
 
         private void TableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -119,9 +43,7 @@ namespace Quoridor_MVC
             {
 
                 playerVertex.BackColor = Color.White;
-                Can_Move_Cancel_Select(playerVertex);
                 playerVertex = label;
-                Can_Move_Select(playerVertex);
                 label.BackColor = Color.Fuchsia;
             }
         }
@@ -236,18 +158,18 @@ namespace Quoridor_MVC
 
         public void Button1_Click(object sender, EventArgs e)
         {
-            tableLayoutPanel1.Enabled = true;
-            tableLayoutPanel1.Visible = true;
-            buttonWall.Enabled = true;
-            buttonWall.Visible = true;
-            button1.Visible = false;
-            button1.Enabled = false;
-            labelWallsYou.Text = "You walls: 10";
-            labelWallsEnemy.Text = "Enemy walls: 10";
-            vertexLabelList[32].BackColor = Color.Orange;
-            vertexLabelList[39].BackColor = Color.Fuchsia;
-            playerVertex = vertexLabelList[39];
-            Can_Move_Select(playerVertex);
+            //tableLayoutPanel1.Enabled = true;
+            //tableLayoutPanel1.Visible = true;
+            //buttonWall.Enabled = true;
+            //buttonWall.Visible = true;
+            //button1.Visible = false;
+            //button1.Enabled = false;
+            //labelWallsYou.Text = "You walls: 10";
+            //labelWallsEnemy.Text = "Enemy walls: 10";
+            //vertexLabelList[32].BackColor = Color.Orange;
+            //vertexLabelList[39].BackColor = Color.Fuchsia;
+            //playerVertex = vertexLabelList[39];
+            //Can_Move_Select(playerVertex);
         }
 
         public void ButtonSpendWall_Click(object sender, EventArgs e)
@@ -256,80 +178,12 @@ namespace Quoridor_MVC
             {
                 wallSpend = true;
                 buttonWall.Text = "Cancel wall";
-                Can_Move_Cancel_Select(playerVertex);
             }
             else
             {
                 wallSpend = false;
                 buttonWall.Text = "Wall";
-                Can_Move_Select(playerVertex);
             }
-        }
-
-        public void Can_Move_Select(Control label)
-        {
-            int indexOf = vertexLabelList.IndexOf(label);
-            try
-            {
-                if ((indexOf - 1) % graph.Vertexes.GetLength(0) != graph.Vertexes.GetLength(0) - 1)
-                {
-                    vertexLabelList[indexOf - 1].BackColor = Color.Aqua;
-                }
-            }
-            catch { }
-            try
-            {
-                if ((indexOf + 1) % graph.Vertexes.GetLength(0) != 0)
-                {
-
-
-                    vertexLabelList[indexOf + 1].BackColor = Color.Aqua;
-                }
-            }
-            catch { }
-            try
-            {
-                vertexLabelList[indexOf - graph.Vertexes.GetLength(0)].BackColor = Color.Aqua;
-            }
-            catch { }
-            try
-            {
-                vertexLabelList[indexOf + graph.Vertexes.GetLength(0)].BackColor = Color.Aqua;
-            }
-            catch { }
-        }
-
-        public void Can_Move_Cancel_Select(Control label)
-        {
-            int indexOf = vertexLabelList.IndexOf(label);
-            try
-            {
-                if ((indexOf - 1) % graph.Vertexes.GetLength(0) != graph.Vertexes.GetLength(0) - 1)
-                {
-                    vertexLabelList[indexOf - 1].BackColor = Color.White;
-                }
-            }
-            catch { }
-            try
-            {
-                if ((indexOf + 1) % graph.Vertexes.GetLength(0) != 0)
-                {
-
-
-                    vertexLabelList[indexOf + 1].BackColor = Color.White;
-                }
-            }
-            catch { }
-            try
-            {
-                vertexLabelList[indexOf - graph.Vertexes.GetLength(0)].BackColor = Color.White;
-            }
-            catch { }
-            try
-            {
-                vertexLabelList[indexOf + graph.Vertexes.GetLength(0)].BackColor = Color.White;
-            }
-            catch { }
         }
     }
 }
