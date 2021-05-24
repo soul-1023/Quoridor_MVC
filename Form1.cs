@@ -19,6 +19,7 @@ namespace Quoridor_MVC
         bool wallSpend = false;
         int walls = 10;
         Control playerVertex;
+
         public Form1()
         {
             InitializeComponent();

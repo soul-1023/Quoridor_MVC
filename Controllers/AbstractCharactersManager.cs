@@ -66,7 +66,7 @@ namespace Quoridor_MVC.Controllers
 
         public void SwitchTurn()
         {
-            AbstractCharacter firstCharacter = GetActiveCharacter();
+            AbstractCharacter firstCharacter = Characters[0];
 
             Characters.Remove(firstCharacter);
             Characters.Add(firstCharacter);
