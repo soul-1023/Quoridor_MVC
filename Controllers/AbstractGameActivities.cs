@@ -114,44 +114,37 @@ namespace Quoridor_MVC.Controllers
 
         private void setAdditionalLinks(Coords characterPos)
         {
-            Graph[characterPos.x, characterPos.y].Edges.ForEach(vertex => {
-                if(Graph[vertex.x, vertex.y].IsCharacter)
+            Graph[characterPos.x, characterPos.y].Edges.ForEach(coords => {
+                if(Graph[coords.x, coords.y].IsCharacter)
                 {
-                    //TODO: если условия прыжка не соблюдены по каким-либо причинам, то нужно найти диагонали, на которые можно прыгнуть.
-                    int x = vertex.x - characterPos.x;
-                    int y = vertex.y - characterPos.y;
+                    Coords AnotherCharacter = coords;
+                    var directionToJump = (
+                        x: AnotherCharacter.x - characterPos.x, 
+                        y: AnotherCharacter.y - characterPos.y
+                    );
 
-                    if(x == 1)
+                    Coords vertexIsBehindOpponent = Graph[AnotherCharacter.x, AnotherCharacter.y].Edges.Find(e => {
+                        if (Graph[e.x, e.y].IsCharacter == false)
+                        {
+                            if (directionToJump.x == 1) return e.x == AnotherCharacter.x + 1;
+                            else if (directionToJump.x == -1) return e.x == AnotherCharacter.x - 1;
+                            else if (directionToJump.y == 1) return e.y == AnotherCharacter.y + 1;
+                            else if (directionToJump.y == -1) return e.y == AnotherCharacter.y - 1;
+                        }
+
+                        return false;
+                    });
+
+                    if (vertexIsBehindOpponent != null) 
+                        LinkManager.AddLinks(Graph, characterPos, vertexIsBehindOpponent);
+                    else
                     {
-                        LinkManager.AddLinks(Graph, characterPos,
-                            Graph[vertex.x, vertex.y]
-                                .Edges
-                                .Find(e => e.x == vertex.x + 1 && !Graph[e.x, e.y].IsCharacter)
-                        );                      
-                    } 
-                    else if(x == -1)
-                    {
-                        LinkManager.AddLinks(Graph, characterPos,
-                            Graph[vertex.x, vertex.y].Edges
-                                .Find(e => e.x == vertex.x - 1 && !Graph[e.x, e.y].IsCharacter)
-                        );
-                    } 
-                    else if(y == 1)
-                    {
-                        LinkManager.AddLinks(Graph, characterPos,
-                            Graph[vertex.x, vertex.y].Edges
-                                .Find(e => e.y == vertex.y + 1 && !Graph[e.x, e.y].IsCharacter)
-                        );
-                    } 
-                    else if(y == -1)
-                    {
-                        LinkManager.AddLinks(Graph, characterPos,
-                            Graph[vertex.x, vertex.y].Edges
-                                .Find(e => e.y == vertex.y - 1 && !Graph[e.x, e.y].IsCharacter)
-                        );
+                        Coords[] vertexesForDiagonalJump = Graph[AnotherCharacter.x, AnotherCharacter.y].Edges.Where(e => 
+                            Graph[e.x, e.y].IsCharacter == false
+                        ).ToArray();
+
+                        LinkManager.AddLinks(Graph, characterPos, vertexesForDiagonalJump);
                     }
-
-                    
                 }
             });
         }
