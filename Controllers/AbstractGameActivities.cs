@@ -22,6 +22,7 @@ namespace Quoridor_MVC.Controllers
         public void InitializeSession(int sizeOfField, int charactersQuantity)
         {
             Graph = new Graph(sizeOfField);
+
             FillByCharacters(charactersQuantity, GetStartCoords(sizeOfField));
             CharactersManager.MixPlayers();
             CharactersManager.Characters.ForEach(character =>

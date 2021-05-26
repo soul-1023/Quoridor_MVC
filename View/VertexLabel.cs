@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Quoridor_MVC.View
 {
-    class VertexLabel : Label
+    public class VertexLabel : Label
     {
         public Coords position { get; set; }
         public bool isCharacter { get; set; }

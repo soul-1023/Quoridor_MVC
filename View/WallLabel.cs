@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Quoridor_MVC.View
 {
-    class WallLabel : Label
+    public class WallLabel : Label
     {
         (Coords, Coords) Link { get; set; }
     }

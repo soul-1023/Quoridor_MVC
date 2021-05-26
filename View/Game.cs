@@ -31,7 +31,6 @@ namespace Quoridor_MVC.View
         {
             int xVertex = 0, 
                 yVertex = 0, 
-                xHorizontalLabel = 0, 
                 yHorizontalLabel = 0, 
                 xVerticalLabel = 0, 
                 yVerticalLabel = 0;
