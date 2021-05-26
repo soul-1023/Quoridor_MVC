@@ -46,91 +46,114 @@ namespace Quoridor_MVC.Controllers
             return (xNotSmall && xNotBig && yNotSmall && yNotBig && characterHasLink);
         }
 
-
-
         //Проверка на продолжение игры
-        //Отрефакторить
         private bool CanGameProceed(AbstractGraph graph, List<AbstractCharacter> Characters, Dictionary<AbstractCharacter, Coords[]> WinPositions)
         {
+            bool[,] checkMatrix;
+            int[,] costMatrix;
             int length = graph.Vertexes.GetLength(0);
+            Dictionary<AbstractCharacter, bool> charactersWithTrails = new Dictionary<AbstractCharacter, bool>();
             const int HYPOTETIC_MAX_VALUE = 1000000;
             int[,] costMatrixPattern = new int[length, length];
-            Dictionary<AbstractCharacter, bool> CharacterBool = new Dictionary<AbstractCharacter, bool>();
 
-            for (int y = 0; y < length; y++)
+            bool IsVictoryPossible(Dictionary<AbstractCharacter, bool> charactersWithWays)
             {
-                for (int x = 0; x < length; x++)
+                foreach (var character in charactersWithWays)
                 {
-                    costMatrixPattern[y, x] = HYPOTETIC_MAX_VALUE;
+                    if (character.Value == false)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            void CalculateCostMatrix(List<Coords> edges, Coords minCoords, ref int[,] matrixOfCosts)
+            {
+                foreach (Coords edge in edges)
+                {
+                    if (matrixOfCosts[edge.y, edge.x] > matrixOfCosts[minCoords.y, minCoords.x] + 1)
+                    {
+                        matrixOfCosts[edge.y, edge.x] = matrixOfCosts[minCoords.y, minCoords.x] + 1;
+                    }
                 }
             }
 
-            foreach (AbstractCharacter character in Characters)
+            void SetVictoryPosibility(AbstractCharacter character, int[,] matrixOfCosts, ref Dictionary<AbstractCharacter, bool> charactersWithWays)
             {
-                CharacterBool.Add(character, false);
-                int[,] costMatrix = costMatrixPattern;
-                bool[,] checkMatrix = new bool[length, length];
-                costMatrix[character.CurrentPosition.y, character.CurrentPosition.x] = 0;
-
-                while (CheckAdjMatrix(checkMatrix) == true)
-                {
-                    int min = int.MaxValue;
-                    Coords minCords = new Coords(0, 0);
-
-                    for (int y = 0; y < length; y++)
-                    {
-                        for (int x = 0; x < length; x++)
-                        {
-                            if (costMatrix[y, x] < min && checkMatrix[y, x] == false)
-                            {
-                                minCords = new Coords(x, y);
-                                min = costMatrix[y, x];
-                            }
-                        }
-                    }
-
-                    foreach (Coords Edge in graph[minCords.y, minCords.x].Edges)
-                    {
-                        if (costMatrix[Edge.y, Edge.x] > costMatrix[minCords.y, minCords.x] + 1)
-                        {
-                            costMatrix[Edge.y, Edge.x] = costMatrix[minCords.y, minCords.x] + 1;
-                        }
-                    }
-
-                    checkMatrix[minCords.y, minCords.x] = true;
-                }
-
                 foreach (Coords coords in WinPositions[character])
                 {
-                    if (costMatrix[coords.y, coords.x] < HYPOTETIC_MAX_VALUE)
+                    if (matrixOfCosts[coords.y, coords.x] < HYPOTETIC_MAX_VALUE)
                     {
-                        CharacterBool[character] = true;
-                        continue;
+                        charactersWithWays[character] = true;
                     }
                 }
             }
 
-            foreach (var item in CharacterBool)
+            void FillCostMatrix(ref int[,] matrixOfCosts)
             {
-                if (item.Value == false)
+                for (int y = 0; y < length; y++)
                 {
-                    return false;
+                    for (int x = 0; x < length; x++)
+                    {
+                        matrixOfCosts[y, x] = HYPOTETIC_MAX_VALUE;
+                    }
                 }
             }
 
-            return true;
+            void SetUncheckedMinValues(ref Coords minimalCoords, ref int minimal, int[,] matrixOfCosts, bool[,] matrixOfChecked)
+            {
+                for (int y = 0; y < length; y++)
+                {
+                    for (int x = 0; x < length; x++)
+                    {
+                        if (matrixOfCosts[y, x] < minimal && !matrixOfChecked[y, x])
+                        {
+                            minimalCoords = new Coords(x, y);
+                            minimal = matrixOfCosts[y, x];
+                        }
+                    }
+                }
+            }
+
+            foreach (var character in Characters)
+            {
+                charactersWithTrails.Add(character, false);
+                checkMatrix = new bool[length, length];
+                costMatrix = costMatrixPattern;
+                costMatrix[character.CurrentPosition.y, character.CurrentPosition.x] = 0;
+
+                FillCostMatrix(ref costMatrix);
+
+                while (CheckMarked(checkMatrix))
+                {
+                    int min = int.MaxValue;
+                    Coords minCoords = new Coords(0, 0);
+
+                    SetUncheckedMinValues(ref minCoords, ref min, costMatrix, checkMatrix);
+
+                    CalculateCostMatrix(graph[minCoords.y, minCoords.x].Edges, minCoords, ref costMatrix);
+
+                    checkMatrix[minCoords.y, minCoords.x] = true;
+                }
+
+                SetVictoryPosibility(character, costMatrix, ref charactersWithTrails);
+            }
+
+            return IsVictoryPossible(charactersWithTrails);
         }
 
         //Проверка элементов матрицы смежности
-        private bool CheckAdjMatrix(bool[,] AdjMatrix)
+        private bool CheckMarked(bool[,] matrix)
         {
-            int length = AdjMatrix.GetLength(0);
+            int length = matrix.GetLength(0);
 
             for (int y = 0; y < length; y++)
             {
                 for (int x = 0; x < length; x++)
                 {
-                    if (AdjMatrix[y, x] == false)
+                    if (matrix[y, x] == false)
                     {
                         return true;
                     }
