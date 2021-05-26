@@ -22,5 +22,13 @@ namespace Quoridor_MVC.Controllers
                 graph[coordsPair.Item2.x, coordsPair.Item2.y].Edges.Remove(coordsPair.Item1);
             }
         }
+
+        public void ResertVertexEdges(AbstractGraph graph, Coords vertexCoords)
+        {
+            graph[vertexCoords.x, vertexCoords.y].Edges = graph[vertexCoords.x, vertexCoords.y]
+                .Edges
+                .Where(e => !e.IsTemporary)
+                .ToList();
+        }
     }
 }

@@ -4,6 +4,7 @@
     {
         public int x { get; private set; }
         public int y { get; private set; }
+        public bool IsTemporary { get; set; } = false;
 
         public Coords(int x, int y)
         {

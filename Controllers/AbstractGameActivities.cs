@@ -114,6 +114,27 @@ namespace Quoridor_MVC.Controllers
 
         private void setAdditionalLinks(Coords characterPos)
         {
+            Coords searchVertexIsBehindOpponent(Coords vertexWithOpponent, (int x, int y) directionToJump) {
+                return Graph[vertexWithOpponent.x, vertexWithOpponent.y].Edges.Find(e => {
+                    if (Graph[e.x, e.y].IsCharacter == false)
+                    {
+                        if (directionToJump.x == 1) return e.x == vertexWithOpponent.x + 1;
+                        else if (directionToJump.x == -1) return e.x == vertexWithOpponent.x - 1;
+                        else if (directionToJump.y == 1) return e.y == vertexWithOpponent.y + 1;
+                        else if (directionToJump.y == -1) return e.y == vertexWithOpponent.y - 1;
+                    }
+
+                    return false;
+                });
+            }
+
+            Coords[] searchVertexBySidesFromOpponent(Coords vertexWithOpponent)
+            {
+                return Graph[vertexWithOpponent.x, vertexWithOpponent.y].Edges.Where(e =>
+                            Graph[e.x, e.y].IsCharacter == false
+                        ).ToArray();
+            }
+
             Graph[characterPos.x, characterPos.y].Edges.ForEach(coords => {
                 if(Graph[coords.x, coords.y].IsCharacter)
                 {
@@ -122,28 +143,24 @@ namespace Quoridor_MVC.Controllers
                         x: AnotherCharacter.x - characterPos.x, 
                         y: AnotherCharacter.y - characterPos.y
                     );
+                    Coords vertexIsBehindOpponent = searchVertexIsBehindOpponent(AnotherCharacter, directionToJump);
+                    vertexIsBehindOpponent.IsTemporary = true;
 
-                    Coords vertexIsBehindOpponent = Graph[AnotherCharacter.x, AnotherCharacter.y].Edges.Find(e => {
-                        if (Graph[e.x, e.y].IsCharacter == false)
-                        {
-                            if (directionToJump.x == 1) return e.x == AnotherCharacter.x + 1;
-                            else if (directionToJump.x == -1) return e.x == AnotherCharacter.x - 1;
-                            else if (directionToJump.y == 1) return e.y == AnotherCharacter.y + 1;
-                            else if (directionToJump.y == -1) return e.y == AnotherCharacter.y - 1;
-                        }
-
-                        return false;
-                    });
-
-                    if (vertexIsBehindOpponent != null) 
+                    if (vertexIsBehindOpponent != null)
+                    {
                         LinkManager.AddLinks(Graph, characterPos, vertexIsBehindOpponent);
+                    }
                     else
                     {
-                        Coords[] vertexesForDiagonalJump = Graph[AnotherCharacter.x, AnotherCharacter.y].Edges.Where(e => 
-                            Graph[e.x, e.y].IsCharacter == false
-                        ).ToArray();
+                        List<Coords> vertexesForDiagonalJump = new List<Coords>();
 
-                        LinkManager.AddLinks(Graph, characterPos, vertexesForDiagonalJump);
+                        foreach (var vertex in searchVertexBySidesFromOpponent(AnotherCharacter))
+                        {
+                            vertex.IsTemporary = true;
+                            vertexesForDiagonalJump.Add(vertex);
+                        }
+
+                        LinkManager.AddLinks(Graph, characterPos, vertexesForDiagonalJump.ToArray());
                     }
                 }
             });
