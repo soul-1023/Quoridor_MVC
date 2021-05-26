@@ -10,6 +10,7 @@ namespace Quoridor_MVC.Controllers
         IGraphController LinkManager { get; set; }
         IActivitiesChecker ActivitiesChecker { get; set; }
         AbstractCharactersManager CharactersManager { get; set; }
+        public AbstractGraph Graph { get; private set; }
 
         public AbstractGameActivities()
         {
@@ -33,8 +34,6 @@ namespace Quoridor_MVC.Controllers
         {
             return CharactersManager.WinPositions[character];
         }
-
-        public AbstractGraph Graph { get; private set; }
 
         private Dictionary<string, Coords> GetStartCoords(int graphRowSize)
         {
@@ -86,7 +85,8 @@ namespace Quoridor_MVC.Controllers
 
         public void PlaceWall(AbstractCharacter character, ((Coords, Coords), (Coords, Coords)) linkedVertexes)
         {
-            if(ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes))
+            if (ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes, 
+                CharactersManager.Characters, CharactersManager.WinPositions))
             {
                 LinkManager.RemoveLinks(Graph, linkedVertexes.Item1, linkedVertexes.Item2);
                 character.SpendWall();
