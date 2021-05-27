@@ -12,27 +12,30 @@ namespace Quoridor_MVC.View
 {
     sealed class GameRouter
     {
-        delegate void MoveHandler( (Coords from, Coords to) direction );
-        delegate void ObstacleHandler( 
-                (
-                    (Coords, Coords) firstLink, 
-                    (Coords, Coords) secondLink
-                ) linkedCells
-            );
-        delegate void AI_Handler();
-
-        AbstractGameActivities gameActivities = new GameActivities();
+        AbstractGameActivities gameActivities;
 
         public GameRouter(TableLayoutPanel field, int sizeOfField, int countOfCharacters)
         {
+            gameActivities = new GameActivities();
             gameActivities.InitializeSession(sizeOfField, countOfCharacters);
-            AbstractCharacter character = gameActivities.GetActiveCharacter();
-            var winPositions = gameActivities.getWinPositions(character);
         }
 
+        public void HandleAction( (Coords from, Coords to) direction )
+        {
+            gameActivities.MoveCharacter(direction.from, direction.to);
 
+            gameActivities.FinishGame();
+            gameActivities.ActionOfAI();
+        }
 
+        public void HandleAction( ( (Coords, Coords) firstLink, (Coords, Coords) secondLink ) cells )
+        {
+            gameActivities.PlaceWall(
+                    gameActivities.GetActiveCharacter(),
+                    cells
+                );
 
-
+            gameActivities.ActionOfAI();
+        }
     }
 }

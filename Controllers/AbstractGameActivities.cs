@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Quoridor_MVC.Controllers
 {
@@ -11,6 +13,38 @@ namespace Quoridor_MVC.Controllers
         IActivitiesChecker ActivitiesChecker { get; set; }
         AbstractCharactersManager CharactersManager { get; set; }
         public AbstractGraph Graph { get; private set; }
+
+        public AbstractCharacter Winner
+        {
+            get
+            {
+                return ActivitiesChecker.DefineWinner(
+                        GetActiveCharacter(), 
+                        getWinPositions(GetActiveCharacter())
+                    );
+            }
+        }
+
+        public void ActionOfAI()
+        {
+            const int INTERVAL = 2000;
+
+            while  (GetActiveCharacter() is AbstractAI)
+            {
+                Thread.Sleep(INTERVAL);
+
+                    // действие ИИ от Паши
+                    //
+            }
+        }
+
+        public void FinishGame()
+        {
+            if (Winner != null)
+            {
+                MessageBox.Show($"Игру выиграл игрок { Winner.Name }");
+            }
+        }
 
         public AbstractGameActivities()
         {
@@ -86,11 +120,14 @@ namespace Quoridor_MVC.Controllers
 
         public void PlaceWall(AbstractCharacter character, ((Coords, Coords), (Coords, Coords)) linkedVertexes)
         {
-            if (ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes, 
-                CharactersManager.Characters, CharactersManager.WinPositions))
+            if (
+                    ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes, 
+                    CharactersManager.Characters, CharactersManager.WinPositions)
+                )
             {
                 LinkManager.RemoveLinks(Graph, linkedVertexes.Item1, linkedVertexes.Item2);
                 character.SpendWall();
+                CharactersManager.SwitchTurn();
             }
         }
 
@@ -105,6 +142,7 @@ namespace Quoridor_MVC.Controllers
 
                 Graph[characterPosition.x, characterPosition.y].ToggleIsCharacter();
                 Graph[chosenPosition.x, chosenPosition.y].ToggleIsCharacter();
+                CharactersManager.SwitchTurn();
             }
 
         }
