@@ -15,18 +15,23 @@ namespace Quoridor_MVC.View
     public class Oleg
     {
         private Graph graph = new Models.Graph(8);
-        public static VertexLabel[][] vertexLabelList1;
-        public static Control[][] horizontalWallArray;
-        public static Control[][] verticalWallArray;
+        public VertexLabel[][] vertexLabelList1;
+        public Control[][] horizontalWallArray;
+        public Control[][] verticalWallArray;
 
         bool wallSpend = false;
-        public static int walls = 10;
+        public int walls = 10;
 
-        public static int x = 0;
-        public static int y = 0;
-        public static int xE = 4;
-        public static int yE = 0;
-        public static Button buttonWall;
+        public int x = 0;
+        public  int y = 0;
+        public  int xE = 4;
+        public  int yE = 0;
+        public  Button buttonWall;
+
+        public Oleg()
+        {
+
+        }
 
         public void Start(TableLayoutPanel table, Label labelWallsYou, Button buttonWallSend)
         {
@@ -141,8 +146,7 @@ namespace Quoridor_MVC.View
             CanMove(vertexLabelList1[x][y]);
         }
 
-
-        public static void SetFormat(Control control, int size, Color color)
+        public  void SetFormat(Control control, int size, Color color)
         {
             Padding padding =  new Padding(0);
             control.BackColor = color;
@@ -152,7 +156,7 @@ namespace Quoridor_MVC.View
             control.Margin = padding;
         }
 
-        public static void SetCharacterStart(int x, int y)
+        public  void SetCharacterStart(int x, int y)
         {
             vertexLabelList1[y][x].isCharacter = true;
             vertexLabelList1[y][x].BackColor = Color.Green;
@@ -160,7 +164,7 @@ namespace Quoridor_MVC.View
             vertexLabelList1[xE][yE].BackColor = Color.Orange;
         }
 
-        public static void CanMove(VertexLabel vertex)
+        public  void CanMove(VertexLabel vertex)
         {
             for (int i = 0; x == -1; i++)
             {
@@ -196,7 +200,7 @@ namespace Quoridor_MVC.View
             }
         }
 
-        public static void CancelCanMove(VertexLabel vertex)
+        public  void CancelCanMove(VertexLabel vertex)
         {
             for (int i = 0; x == -1; i++)
             {
@@ -300,13 +304,13 @@ namespace Quoridor_MVC.View
                 CanMove(vertexLabelList1[y][x]);
             }
         }
-        public static void SetEnemyStart(int xE, int yE)
+        public  void SetEnemyStart(int xE, int yE)
         {
             vertexLabelList1[xE][yE].isCharacter = false;
             vertexLabelList1[xE][yE].BackColor = Color.White;
         }
 
-        public static void SetCharacter(VertexLabel vertex)
+        public  void SetCharacter(VertexLabel vertex)
         {
             vertexLabelList1[y][x].isCharacter = false;
             vertexLabelList1[y][x].BackColor = Color.White;
@@ -320,7 +324,7 @@ namespace Quoridor_MVC.View
             }
         }
 
-        public static void SpendWall(WallLabel wall)
+        public  void SpendWall(WallLabel wall)
         {
             int xWall = -1, yWall = -1;
 
@@ -386,8 +390,7 @@ namespace Quoridor_MVC.View
             }
         }
 
-
-        public static void EnterWall(WallLabel wall)
+        public  void EnterWall(WallLabel wall)
         {
             int xWall = -1, yWall = -1;
 
@@ -443,7 +446,7 @@ namespace Quoridor_MVC.View
 
         }
 
-        public static void LeaveWall(WallLabel wall)
+        public  void LeaveWall(WallLabel wall)
         {
             int xWall = -1, yWall = -1;
 

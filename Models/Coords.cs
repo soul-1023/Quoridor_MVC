@@ -1,6 +1,6 @@
 ﻿namespace Quoridor_MVC.Models
 {
-    sealed class Coords
+    sealed public class Coords
     {
         public int x { get; private set; }
         public int y { get; private set; }

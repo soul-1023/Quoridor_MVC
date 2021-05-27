@@ -95,7 +95,7 @@
     <Compile Include="View\VertexLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\Game.cs" />
+    <Compile Include="View\GameRouter.cs" />
     <Compile Include="Controllers\GameActivities.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

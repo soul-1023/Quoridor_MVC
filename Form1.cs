@@ -19,11 +19,20 @@ namespace Quoridor_MVC
     {
         public Form1()
         {
+            InitializeComponent(); 
+
             Oleg oleg = new Oleg();
-            InitializeComponent();
-            oleg.Start(tableLayoutPanel1, labelWallsYou, buttonWall);
-            button1.MouseClick += (s, e) => oleg.Button1_Click(tableLayoutPanel1, buttonWall, button1, labelWallsYou, labelWallsEnemy);
-            buttonWall.MouseClick += (s, e) => oleg.ButtonSpendWall_Click(s, e);
+
+            oleg.Start(tableLayoutPanel1, labelWallsYou, SetWallBtn);
+            PlayBtn.MouseClick += (s, e) => oleg.Button1_Click(
+                tableLayoutPanel1, 
+                SetWallBtn, 
+                PlayBtn, 
+                labelWallsYou, 
+                labelWallsEnemy
+            );
+
+            SetWallBtn.MouseClick += (s, e) => oleg.ButtonSpendWall_Click(s, e);
         }
 
     }

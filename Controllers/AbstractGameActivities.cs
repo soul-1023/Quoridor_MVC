@@ -106,6 +106,7 @@ namespace Quoridor_MVC.Controllers
                 Graph[characterPosition.x, characterPosition.y].ToggleIsCharacter();
                 Graph[chosenPosition.x, chosenPosition.y].ToggleIsCharacter();
             }
+
         }
 
         public List<Coords> GetMovementOptions(Coords currentPos)
