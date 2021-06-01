@@ -9,9 +9,9 @@ namespace Quoridor_MVC.Controllers
 {
     abstract class AbstractGameActivities
     {
-        IGraphController LinkManager { get; set; }
+        GraphController LinkManager { get; set; }
         IActivitiesChecker ActivitiesChecker { get; set; }
-        AbstractCharactersManager CharactersManager { get; set; }
+        public AbstractCharactersManager CharactersManager { get; set; }
         public AbstractGraph Graph { get; private set; }
 
         public AbstractCharacter Winner
@@ -31,11 +31,20 @@ namespace Quoridor_MVC.Controllers
 
             while  (GetActiveCharacter() is AbstractAI)
             {
+                //расстановка доп. связей для бота
+                setAdditionalLinks(GetActiveCharacter().CurrentPosition);
                 Thread.Sleep(INTERVAL);
 
-                    // действие ИИ от Паши
-                    //
+                // действие ИИ от Паши
+                //
+
+                List<Coords> Edges = Graph[GetActiveCharacter().CurrentPosition.x, GetActiveCharacter().CurrentPosition.y].Edges;
+                int range = Edges.Count;
+                Random rand = new Random();
+                MoveCharacter(GetActiveCharacter().CurrentPosition, Edges[rand.Next(0, range - 1)]);
             }
+            //расстановка доп. связей для игрока
+            setAdditionalLinks(GetActiveCharacter().CurrentPosition);
         }
 
         public void FinishGame()
@@ -59,6 +68,7 @@ namespace Quoridor_MVC.Controllers
 
             FillByCharacters(charactersQuantity, GetStartCoords(sizeOfField));
             CharactersManager.MixPlayers();
+
             CharactersManager.Characters.ForEach(character =>
             {
                 CharactersManager.SetWinningSide(character.CurrentPosition, sizeOfField);
@@ -84,8 +94,8 @@ namespace Quoridor_MVC.Controllers
                 averageBottomSide = averageLeftSide = (graphRowSize / 2) + 1;
             } else
             {
-                averageTopSide = averageRightSide = (int)Math.Ceiling((decimal)(graphRowSize / 2));
-                averageBottomSide = averageLeftSide = (int)Math.Floor((decimal)(graphRowSize / 2));
+                averageTopSide = averageRightSide = (int)Math.Ceiling(graphRowSize / 2.0);
+                averageBottomSide = averageLeftSide = (int)Math.Floor(graphRowSize / 2.0);
             }
 
             startPos.Add("Top", new Coords(averageTopSide, 0));
@@ -142,6 +152,9 @@ namespace Quoridor_MVC.Controllers
 
                 Graph[characterPosition.x, characterPosition.y].ToggleIsCharacter();
                 Graph[chosenPosition.x, chosenPosition.y].ToggleIsCharacter();
+                //Убрать временные связи
+                LinkManager.ResertVertexEdges(Graph, characterPosition);
+
                 CharactersManager.SwitchTurn();
             }
 
@@ -175,20 +188,23 @@ namespace Quoridor_MVC.Controllers
                         ).ToArray();
             }
 
-            Graph[characterPos.x, characterPos.y].Edges.ForEach(coords => {
-                if(Graph[coords.x, coords.y].IsCharacter)
+            List<Coords> posibleChanges = new List<Coords>();
+
+            foreach (Coords coords in Graph[characterPos.x, characterPos.y].Edges)
+            {
+                if (Graph[coords.x, coords.y].IsCharacter)
                 {
                     Coords AnotherCharacter = coords;
                     var directionToJump = (
-                        x: AnotherCharacter.x - characterPos.x, 
+                        x: AnotherCharacter.x - characterPos.x,
                         y: AnotherCharacter.y - characterPos.y
                     );
                     Coords vertexIsBehindOpponent = searchVertexIsBehindOpponent(AnotherCharacter, directionToJump);
-                    vertexIsBehindOpponent.IsTemporary = true;
 
                     if (vertexIsBehindOpponent != null)
                     {
-                        LinkManager.AddLinks(Graph, characterPos, vertexIsBehindOpponent);
+                        vertexIsBehindOpponent.IsTemporary = true;
+                        posibleChanges.Add(vertexIsBehindOpponent);
                     }
                     else
                     {
@@ -197,13 +213,13 @@ namespace Quoridor_MVC.Controllers
                         foreach (var vertex in searchVertexBySidesFromOpponent(AnotherCharacter))
                         {
                             vertex.IsTemporary = true;
-                            vertexesForDiagonalJump.Add(vertex);
+                            posibleChanges.Add(vertex);
                         }
-
-                        LinkManager.AddLinks(Graph, characterPos, vertexesForDiagonalJump.ToArray());
                     }
                 }
-            });
+            }
+
+            LinkManager.AddLinks(Graph, characterPos, posibleChanges.ToArray());
         }
     }
 }

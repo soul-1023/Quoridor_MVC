@@ -12,5 +12,12 @@ namespace Quoridor_MVC.View
     {
         public Coords position { get; set; }
         public bool isCharacter { get; set; }
+
+        public VertexLabel(int x,int y)
+        {
+            this.position = new Coords(x, y);
+        }
     }
+
+    
 }

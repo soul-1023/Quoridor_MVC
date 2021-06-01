@@ -12,7 +12,7 @@ namespace Quoridor_MVC.View
 {
     sealed class GameRouter
     {
-        AbstractGameActivities gameActivities;
+        public AbstractGameActivities gameActivities;
 
         public GameRouter(TableLayoutPanel field, int sizeOfField, int countOfCharacters)
         {
@@ -25,17 +25,32 @@ namespace Quoridor_MVC.View
             gameActivities.MoveCharacter(direction.from, direction.to);
 
             gameActivities.FinishGame();
+            
             gameActivities.ActionOfAI();
         }
 
-        public void HandleAction( ( (Coords, Coords) firstLink, (Coords, Coords) secondLink ) cells )
+        public void HandleAction( ((Coords, Coords) firstLink, (Coords, Coords) secondLink) cells )
         {
             gameActivities.PlaceWall(
                     gameActivities.GetActiveCharacter(),
                     cells
                 );
-
             gameActivities.ActionOfAI();
         }
+
+        public List<Coords> GetPlayerEdges()
+        {
+            Coords currentPlayerPos = gameActivities.GetActiveCharacter().CurrentPosition;
+            
+            return gameActivities.Graph[currentPlayerPos.x, currentPlayerPos.y].Edges;
+        }
+
+        public List<AbstractCharacter> GetCharacters()
+        {
+            return gameActivities.CharactersManager.Characters;
+        }
+
+
+
     }
 }
