@@ -219,7 +219,11 @@ namespace Quoridor_MVC.Controllers
                 }
             }
 
-            LinkManager.AddLinks(Graph, characterPos, posibleChanges.ToArray());
+            if(posibleChanges != null)
+            {
+                LinkManager.AddLinks(Graph, characterPos, posibleChanges.ToArray());
+
+            }
         }
     }
 }
