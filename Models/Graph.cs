@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Quoridor_MVC.Models
 {
-    sealed class Graph : AbstractGraph
+    sealed class Graph : AbstractGraph ,ICloneable
     {
         public Graph(int size)
         {
@@ -33,6 +33,19 @@ namespace Quoridor_MVC.Models
             Coords[] AroundElems = { TopElem, DownElem, LeftElem, RightElem };
 
             AroundElems.Where(e => e != null).ToList().ForEach(e => this[y, x].Edges.Add(e));
+        }
+
+        public object Clone()
+        {
+            Graph g = new Graph(this.Vertexes.GetLength(0));
+            for (int i = 0; i < this.Vertexes.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.Vertexes.GetLength(0); j++)
+                {
+                    g.Vertexes[i,j] = this.Vertexes[i, j].Clone() as AbstractVertex;
+                }
+            }
+            return g;
         }
 
         public override AbstractVertex this[int y, int x]

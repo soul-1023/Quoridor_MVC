@@ -11,43 +11,69 @@ namespace Quoridor_MVC.Controllers
     {
         public bool CanMove(AbstractGraph graph, Coords characterPosition, Coords chosenPosition)
         {
-            return SuitsConditions(graph, characterPosition, chosenPosition);
+            return SuitsConditions(graph, characterPosition, chosenPosition, true);
         }
 
         public bool CanPlaceWall(AbstractGraph graph, ((Coords, Coords), (Coords, Coords)) CoordPairs,
             List<AbstractCharacter> Characters, Dictionary<AbstractCharacter, Coords[]> WinPositions)
         {
-            return SuitsConditions(graph, CoordPairs.Item1.Item1, CoordPairs.Item1.Item2)
-              && SuitsConditions(graph, CoordPairs.Item1.Item2, CoordPairs.Item2.Item1)
-              && SuitsConditions(graph, CoordPairs.Item2.Item1, CoordPairs.Item2.Item2)
-              //может ли игра продолжаться
-              && CanGameProceed(graph, Characters, WinPositions);
+            bool b1 = SuitsConditions(graph, CoordPairs.Item1.Item1, CoordPairs.Item1.Item2, false);
+            bool b2 = SuitsConditions(graph, CoordPairs.Item2.Item1, CoordPairs.Item2.Item2, false);
+            bool b3 = SuitsConditions(graph, CoordPairs.Item1.Item1, CoordPairs.Item2.Item1, false);
+            bool b4 = SuitsConditions(graph, CoordPairs.Item1.Item2, CoordPairs.Item2.Item2, false);
+            int i = 0;
+            List<bool> bools = new List<bool> { b1, b2, b3, b4 };
+            foreach(bool b in bools)
+            {
+                if (b == false)
+                    i++;
+
+            }
+            var one=CanGameProceed(graph, Characters, WinPositions);
+            return i == 0 || (i == 1 && (b3 == false || b4 == false));
+
+            //может ли игра продолжаться
+           
         }
 
         public AbstractCharacter DefineWinner(AbstractCharacter character, Coords[] winPoints)
         {
+
             foreach (Coords pos in winPoints)
             {
-                if (pos == character.CurrentPosition)
+                if (pos.x == character.CurrentPosition.x && pos.y == character.CurrentPosition.y)
                     return character;
             }
 
             return null;
         }
 
-        private bool SuitsConditions(AbstractGraph graph, Coords firstPosition, Coords secondPosition)
+        //Неправильные вершины
+        private bool SuitsConditions(AbstractGraph graph, Coords firstPosition, Coords secondPosition, bool isMove)
         {
             bool xNotSmall = secondPosition.x >= 0;
             bool xNotBig = secondPosition.x < graph.Vertexes.GetLength(0);
             bool yNotSmall = secondPosition.y >= 0;
             bool yNotBig = secondPosition.y < graph.Vertexes.GetLength(0);
-            bool characterHasLink = graph[firstPosition.x, firstPosition.y].Edges.Contains(secondPosition);
+            bool characterHasLink;
+            if (isMove)
+            {
+                characterHasLink = graph[firstPosition.y, firstPosition.x].Edges.
+                    Find(e => e.x == secondPosition.x && e.y == secondPosition.y && graph[e.y, e.x].IsCharacter == false)
+                    != null;
+            }
+            else
+            {
+                characterHasLink = graph[firstPosition.y, firstPosition.x].Edges.
+                    Find(e => e.x == secondPosition.x && e.y == secondPosition.y)
+                    != null;
+            }
 
             return (xNotSmall && xNotBig && yNotSmall && yNotBig && characterHasLink);
         }
 
         //Проверка на продолжение игры
-        private bool CanGameProceed(AbstractGraph graph, List<AbstractCharacter> Characters, Dictionary<AbstractCharacter, Coords[]> WinPositions)
+        public bool CanGameProceed(AbstractGraph graph, List<AbstractCharacter> Characters, Dictionary<AbstractCharacter, Coords[]> WinPositions)
         {
             bool[,] checkMatrix;
             int[,] costMatrix;
@@ -122,9 +148,9 @@ namespace Quoridor_MVC.Controllers
                 charactersWithTrails.Add(character, false);
                 checkMatrix = new bool[length, length];
                 costMatrix = costMatrixPattern;
-                costMatrix[character.CurrentPosition.y, character.CurrentPosition.x] = 0;
-
+                
                 FillCostMatrix(ref costMatrix);
+                costMatrix[character.CurrentPosition.y, character.CurrentPosition.x] = 0;
 
                 while (CheckMarked(checkMatrix))
                 {

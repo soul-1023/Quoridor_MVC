@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-
+using Quoridor_MVC;
 namespace Quoridor_MVC.Controllers
 {
     abstract class AbstractGameActivities
     {
         GraphController LinkManager { get; set; }
-        IActivitiesChecker ActivitiesChecker { get; set; }
+        public IActivitiesChecker ActivitiesChecker { get; set; }
         public AbstractCharactersManager CharactersManager { get; set; }
         public AbstractGraph Graph { get; private set; }
 
@@ -28,23 +28,39 @@ namespace Quoridor_MVC.Controllers
         public void ActionOfAI()
         {
             const int INTERVAL = 2000;
-
+            var c = GetActiveCharacter();
             while  (GetActiveCharacter() is AbstractAI)
             {
                 //расстановка доп. связей для бота
                 setAdditionalLinks(GetActiveCharacter().CurrentPosition);
-                Thread.Sleep(INTERVAL);
+                //Thread.Sleep(INTERVAL);
+                var Ai=GetActiveCharacter() as AI;
+                Ai.Ruller = this;
+                Ai.CHMO = CharactersManager;
+                Ai.check = this.ActivitiesChecker as ActivitiesChecker;
+               
+                Ai.TestAll(Graph);
 
                 // действие ИИ от Паши
                 //
+                //var a = GetActiveCharacter().CurrentPosition;
+                //List<Coords> Edges = Graph[GetActiveCharacter().CurrentPosition.y, GetActiveCharacter().CurrentPosition.x].Edges;
+                //int range = Edges.Count;
+                //Random rand = new Random();
+                ////Ошибка
+                //if (GetActiveCharacter().CurrentPosition.y <= 4)
+                //    MoveCharacter(GetActiveCharacter().CurrentPosition, Edges.Find(x => x.y == GetActiveCharacter().CurrentPosition.y + 1));
+                //else
 
-                List<Coords> Edges = Graph[GetActiveCharacter().CurrentPosition.x, GetActiveCharacter().CurrentPosition.y].Edges;
-                int range = Edges.Count;
-                Random rand = new Random();
-                MoveCharacter(GetActiveCharacter().CurrentPosition, Edges[rand.Next(0, range - 1)]);
+
+                //CharactersManager.SwitchTurn();
+
+                //SwitchTurn();
+
             }
-            //расстановка доп. связей для игрока
-            setAdditionalLinks(GetActiveCharacter().CurrentPosition);
+           
+                //расстановка доп. связей для игрока
+                setAdditionalLinks(GetActiveCharacter().CurrentPosition);
         }
 
         public void FinishGame()
@@ -72,7 +88,9 @@ namespace Quoridor_MVC.Controllers
             CharactersManager.Characters.ForEach(character =>
             {
                 CharactersManager.SetWinningSide(character.CurrentPosition, sizeOfField);
+                Graph[character.CurrentPosition.y, character.CurrentPosition.x].ToggleIsCharacter();
             });
+            
         }
 
         public Coords[] getWinPositions(AbstractCharacter character)
@@ -90,12 +108,13 @@ namespace Quoridor_MVC.Controllers
 
             if (graphRowSize % 2 == 0)
             {
-                averageTopSide = averageRightSide = graphRowSize / 2;
-                averageBottomSide = averageLeftSide = (graphRowSize / 2) + 1;
-            } else
+                averageTopSide = averageRightSide = (graphRowSize - 1) / 2;
+                averageBottomSide = averageLeftSide = ((graphRowSize - 1) / 2) + 1;
+            }
+            else
             {
-                averageTopSide = averageRightSide = (int)Math.Ceiling(graphRowSize / 2.0);
-                averageBottomSide = averageLeftSide = (int)Math.Floor(graphRowSize / 2.0);
+                averageTopSide = averageRightSide = (int)Math.Ceiling((decimal)(graphRowSize - 1 / 2));
+                averageBottomSide = averageLeftSide = (int)Math.Floor((decimal)(graphRowSize - 1 / 2));
             }
 
             startPos.Add("Top", new Coords(averageTopSide, 0));
@@ -105,9 +124,11 @@ namespace Quoridor_MVC.Controllers
 
             return startPos;
         }
-       
         public AbstractCharacter GetActiveCharacter() => CharactersManager.Characters[0];
-        
+
+        public void SwitchTurn() => CharactersManager.SwitchTurn();
+
+
         private void FillByCharacters(int charactersQuantity, Dictionary<string, Coords> startCoords)
         {
             if(charactersQuantity == 2)
@@ -130,30 +151,71 @@ namespace Quoridor_MVC.Controllers
 
         public void PlaceWall(AbstractCharacter character, ((Coords, Coords), (Coords, Coords)) linkedVertexes)
         {
+
+            Graph clone = new Graph(Graph.Vertexes.GetLength(0));
+
+            clone =( Graph as Graph).Clone() as Graph;
+
+            LinkManager.RemoveLinks(clone, linkedVertexes.Item1, linkedVertexes.Item2);
+
+
+
+
             if (
-                    ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes, 
-                    CharactersManager.Characters, CharactersManager.WinPositions)
+                    ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes,
+                    CharactersManager.Characters, CharactersManager.WinPositions) && (ActivitiesChecker as ActivitiesChecker).CanGameProceed(clone, CharactersManager.Characters, CharactersManager.WinPositions)
                 )
             {
                 LinkManager.RemoveLinks(Graph, linkedVertexes.Item1, linkedVertexes.Item2);
                 character.SpendWall();
                 CharactersManager.SwitchTurn();
             }
+          
+        }
+
+        public bool OlegChek(((Coords, Coords), (Coords, Coords)) linkedVertexes)
+        {
+            Graph clone = new Graph(Graph.Vertexes.GetLength(0));
+
+            clone = (Graph as Graph).Clone() as Graph;
+
+            LinkManager.RemoveLinks(clone, linkedVertexes.Item1, linkedVertexes.Item2);
+
+
+
+
+            if (
+                    ActivitiesChecker.CanPlaceWall(Graph, linkedVertexes,
+                    CharactersManager.Characters, CharactersManager.WinPositions) && (ActivitiesChecker as ActivitiesChecker).CanGameProceed(clone, CharactersManager.Characters, CharactersManager.WinPositions)
+                )
+            {
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void MoveCharacter(Coords characterPosition, Coords chosenPosition)
         {
-            if(ActivitiesChecker.CanMove(Graph, characterPosition, chosenPosition))
+            bool check = ActivitiesChecker.CanMove(Graph, characterPosition, chosenPosition);
+            if (ActivitiesChecker.CanMove(Graph, characterPosition, chosenPosition))
             {
                 CharactersManager.Characters
-                    .Where(character => character.CurrentPosition == characterPosition)
+                    .Where(character => character.CurrentPosition.x == characterPosition.x && character.CurrentPosition.y == characterPosition.y)
                     .First()
                     .Move(chosenPosition);
 
-                Graph[characterPosition.x, characterPosition.y].ToggleIsCharacter();
-                Graph[chosenPosition.x, chosenPosition.y].ToggleIsCharacter();
+                Graph[characterPosition.y, characterPosition.x].ToggleIsCharacter();
+                Graph[chosenPosition.y, chosenPosition.x].ToggleIsCharacter();
                 //Убрать временные связи
-                LinkManager.ResertVertexEdges(Graph, characterPosition);
+                LinkManager.ResertVertexEdges(Graph, chosenPosition, true);
+
+                LinkManager.ResertVertexEdges(Graph, characterPosition, false);
+
+                FinishGame();
 
                 CharactersManager.SwitchTurn();
             }
@@ -164,12 +226,12 @@ namespace Quoridor_MVC.Controllers
         {
             return Graph[currentPos.x, currentPos.y].Edges;
         }
-
+        //Пересмотреть метод
         private void setAdditionalLinks(Coords characterPos)
         {
             Coords searchVertexIsBehindOpponent(Coords vertexWithOpponent, (int x, int y) directionToJump) {
-                return Graph[vertexWithOpponent.x, vertexWithOpponent.y].Edges.Find(e => {
-                    if (Graph[e.x, e.y].IsCharacter == false)
+                return Graph[vertexWithOpponent.y, vertexWithOpponent.x].Edges.Find(e => {
+                    if (Graph[e.y, e.x].IsCharacter == false)
                     {
                         if (directionToJump.x == 1) return e.x == vertexWithOpponent.x + 1;
                         else if (directionToJump.x == -1) return e.x == vertexWithOpponent.x - 1;
@@ -183,18 +245,19 @@ namespace Quoridor_MVC.Controllers
 
             Coords[] searchVertexBySidesFromOpponent(Coords vertexWithOpponent)
             {
-                return Graph[vertexWithOpponent.x, vertexWithOpponent.y].Edges.Where(e =>
-                            Graph[e.x, e.y].IsCharacter == false
+                return Graph[vertexWithOpponent.y, vertexWithOpponent.x].Edges.Where(e =>
+                            Graph[e.y, e.x].IsCharacter == false
                         ).ToArray();
             }
 
             List<Coords> posibleChanges = new List<Coords>();
 
-            foreach (Coords coords in Graph[characterPos.x, characterPos.y].Edges)
+            foreach (Coords coords in Graph[characterPos.y, characterPos.x].Edges)
             {
-                if (Graph[coords.x, coords.y].IsCharacter)
+                if (Graph[coords.y, coords.x].IsCharacter)
                 {
                     Coords AnotherCharacter = coords;
+                    
                     var directionToJump = (
                         x: AnotherCharacter.x - characterPos.x,
                         y: AnotherCharacter.y - characterPos.y
@@ -203,7 +266,6 @@ namespace Quoridor_MVC.Controllers
 
                     if (vertexIsBehindOpponent != null)
                     {
-                        vertexIsBehindOpponent.IsTemporary = true;
                         posibleChanges.Add(vertexIsBehindOpponent);
                     }
                     else
@@ -212,7 +274,6 @@ namespace Quoridor_MVC.Controllers
 
                         foreach (var vertex in searchVertexBySidesFromOpponent(AnotherCharacter))
                         {
-                            vertex.IsTemporary = true;
                             posibleChanges.Add(vertex);
                         }
                     }
@@ -222,7 +283,6 @@ namespace Quoridor_MVC.Controllers
             if(posibleChanges != null)
             {
                 LinkManager.AddLinks(Graph, characterPos, posibleChanges.ToArray());
-
             }
         }
     }

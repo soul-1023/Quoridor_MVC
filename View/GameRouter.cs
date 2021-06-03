@@ -24,7 +24,6 @@ namespace Quoridor_MVC.View
         {
             gameActivities.MoveCharacter(direction.from, direction.to);
 
-            gameActivities.FinishGame();
             
             gameActivities.ActionOfAI();
         }
@@ -42,7 +41,9 @@ namespace Quoridor_MVC.View
         {
             Coords currentPlayerPos = gameActivities.GetActiveCharacter().CurrentPosition;
             
-            return gameActivities.Graph[currentPlayerPos.x, currentPlayerPos.y].Edges;
+            return gameActivities.Graph[currentPlayerPos.y, currentPlayerPos.x].Edges.Where(e => {
+                return gameActivities.Graph[e.y, e.x].IsCharacter == false;
+            }).ToList();
         }
 
         public List<AbstractCharacter> GetCharacters()
@@ -50,7 +51,11 @@ namespace Quoridor_MVC.View
             return gameActivities.CharactersManager.Characters;
         }
 
-
+        public bool IsWallPlacable(((Coords, Coords), (Coords, Coords)) linkedVertexes)
+        {
+            return gameActivities.ActivitiesChecker.CanPlaceWall(gameActivities.Graph, linkedVertexes,
+                  gameActivities.CharactersManager.Characters, gameActivities.CharactersManager.WinPositions);
+        }
 
     }
 }

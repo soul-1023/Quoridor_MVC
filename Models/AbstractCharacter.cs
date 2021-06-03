@@ -2,6 +2,7 @@
 {
     abstract class AbstractCharacter
     {
+        public View.Oleg oleja;
         public int Walls { get; protected set; } = 10;
         
         public string Name { get; protected set; }

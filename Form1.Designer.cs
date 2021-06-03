@@ -28,11 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelWallsYou = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWall = new System.Windows.Forms.Button();
-            this.labelWallsEnemy1 = new System.Windows.Forms.Label();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
@@ -44,20 +42,6 @@
             this.labelCoral = new System.Windows.Forms.Label();
             this.labelCrymson = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(77, 61);
-            this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Visible = false;
             // 
             // labelWallsYou
             // 
@@ -90,15 +74,6 @@
             this.buttonWall.UseVisualStyleBackColor = true;
             this.buttonWall.Visible = false;
             // 
-            // labelWallsEnemy1
-            // 
-            this.labelWallsEnemy1.AutoSize = true;
-            this.labelWallsEnemy1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelWallsEnemy1.Location = new System.Drawing.Point(649, 216);
-            this.labelWallsEnemy1.Name = "labelWallsEnemy1";
-            this.labelWallsEnemy1.Size = new System.Drawing.Size(0, 25);
-            this.labelWallsEnemy1.TabIndex = 1;
-            // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
@@ -111,6 +86,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "1 player";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.Visible = false;
             // 
             // radioButton2
             // 
@@ -123,6 +99,7 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "2 players";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.Visible = false;
             // 
             // radioButton3
             // 
@@ -135,6 +112,7 @@
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "3 players";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.Visible = false;
             // 
             // labelWallsEnemy2
             // 
@@ -219,12 +197,11 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.labelWallsEnemy3);
             this.Controls.Add(this.labelWallsEnemy2);
-            this.Controls.Add(this.labelWallsEnemy1);
             this.Controls.Add(this.labelWallsYou);
-            this.Controls.Add(this.tableLayoutPanel1);
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,8 +210,6 @@
         #endregion
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonWall;
-        private System.Windows.Forms.Label labelWallsEnemy1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.Label labelWallsYou;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;

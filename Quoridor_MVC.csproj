@@ -81,6 +81,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AbstractVertex.cs" />
+    <Compile Include="Models\Matrix.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Vertex.cs" />
     <Compile Include="Models\Graph.cs" />

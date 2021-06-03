@@ -20,10 +20,12 @@ namespace Quoridor_MVC.View
         public VertexLabel[][] vertexLabelList1;
         public Control[][] horizontalWallArray;
         public Control[][] verticalWallArray;
+        public TableLayoutPanel tableLayoutPanel=new TableLayoutPanel();
+        public Label labelWallsEnemy = new Label();
 
         bool wallSpend = false;
         public int walls = 10;
-
+        public int eWalls = 10;
         public  int xE = 4;
         public  int yE = 0;
         public bool isPlayerTurn = true;
@@ -38,10 +40,44 @@ namespace Quoridor_MVC.View
 
         }
 
-        //Вызывается при старте игры, рисует поле, заполняет массивы (array), задает координаты лейблам
-        public void Start(TableLayoutPanel table, Label labelWallsYou, Button buttonWallSend)
+
+        //Раскрасить стены, поставленные противником
+        public void PaintEnemyWalls((Coords, Coords) Coords1, (Coords, Coords) Coords2)
         {
-            
+            eWalls--;
+            labelWallsEnemy.Text = "Enemy Orange walls: " + eWalls;
+            if (Coords1.Item1.x==Coords1.Item2.x)
+            {
+                tableLayoutPanel.GetControlFromPosition((2 * Coords1.Item1.x), (2 * Coords1.Item1.y) - 1).Visible = false;
+                tableLayoutPanel.GetControlFromPosition((2 * Coords2.Item1.x), (2 * Coords2.Item1.y) - 1).Visible = false;
+                tableLayoutPanel.GetControlFromPosition((2 * Coords2.Item1.x)-1, (2 * Coords2.Item1.y) - 1).BackColor = Color.Black;
+            }
+            else
+            {
+                tableLayoutPanel.GetControlFromPosition((2 * Coords1.Item1.x)-1, (2 * Coords1.Item1.y)).Visible = false;
+                tableLayoutPanel.GetControlFromPosition((2 * Coords2.Item1.x)-1, (2 * Coords2.Item1.y)).Visible = false;
+                tableLayoutPanel.GetControlFromPosition((2 * Coords2.Item1.x) - 1, (2 * Coords2.Item1.y) - 1).BackColor = Color.Black;
+            }
+        }
+
+
+
+
+
+
+
+
+
+        //Вызывается при старте игры, рисует поле, заполняет массивы (array), задает координаты лейблам
+        public void Start(Label labelWallsYou, Button buttonWallSend)
+        {
+            labelWallsEnemy.Font = new Font("Font", 15);
+            labelWallsEnemy.Location = new Point(649, 216);
+            labelWallsEnemy.AutoSize = true;
+
+            tableLayoutPanel.Visible = false;
+            tableLayoutPanel.AutoSize = true;
+
             buttonWall = buttonWallSend;
             vertexLabelList1 = new VertexLabel[graph.Vertexes.GetLength(0)][];
 
@@ -60,24 +96,24 @@ namespace Quoridor_MVC.View
             }
 
             int xVertex = 0, yVertex = 0, yHorizontalLabel = 0, yHorizontalWall = 0;
-            
-            table.RowCount = (2 * graph.Vertexes.GetLength(0)) - 1;
-            table.ColumnCount = (2 * graph.Vertexes.GetLength(0)) - 1;
-            table.BackColor = Color.Black;
 
-            for (int i = 0; i < table.RowCount; i++)
+            tableLayoutPanel.RowCount = (2 * graph.Vertexes.GetLength(0)) - 1;
+            tableLayoutPanel.ColumnCount = (2 * graph.Vertexes.GetLength(0)) - 1;
+            tableLayoutPanel.BackColor = Color.Black;
+
+            for (int i = 0; i < tableLayoutPanel.RowCount; i++)
             {
                 bool switchYVertex = false;
                 bool switchYHorizontalLabel = false;
                 yHorizontalWall = 0;
 
-                for (int j = 0; j < table.ColumnCount; j++)
+                for (int j = 0; j < tableLayoutPanel.ColumnCount; j++)
                 {
 
                     if ((i % 2 == 0) && (j % 2 == 0))
                     {
                         VertexLabel vertex = new VertexLabel(i/2, j/2);
-                        table.Controls.Add(vertex, i, j);
+                        tableLayoutPanel.Controls.Add(vertex, i, j);
                         //vertex.BackColor = Color.White;
                         //vertex.Dock = DockStyle.Fill;
                         //vertex.Height = 60;
@@ -94,13 +130,8 @@ namespace Quoridor_MVC.View
                     else if ((i % 2 == 0) && (j % 2 == 1))
                     {
                         WallLabel wall = new WallLabel();
-                        table.Controls.Add(wall, i, j);
+                        tableLayoutPanel.Controls.Add(wall, i, j);
                         horizontalWallArray[yHorizontalWall][i] = wall;
-                        //wall.BackColor = Color.Gray;
-                        //wall.Dock = DockStyle.Fill;
-                        //wall.Width = 15;
-                        //wall.Height = 15;
-                        //wall.Margin = Padding;
                         SetFormat(wall, 15, Color.Gray);
                         wall.Click += (s, e) => label_Click_wall(wall, labelWallsYou);
                         wall.MouseEnter += (s, e) => label_mouse_enter_wall(wall);
@@ -110,13 +141,9 @@ namespace Quoridor_MVC.View
                     else if ((i % 2 == 1) && (j % 2 == 0))
                     {
                         WallLabel wall = new WallLabel();
-                        table.Controls.Add(wall, i, j);
+                        tableLayoutPanel.Controls.Add(wall, i, j);
                         verticalWallArray[yHorizontalLabel][j] = wall;
-                        //wall.BackColor = Color.Gray;
-                        //wall.Dock = DockStyle.Fill;
-                        //wall.Width = 15;
-                        //wall.Height = 15;
-                        //wall.Margin = Padding;
+                       
                         SetFormat(wall, 15, Color.Gray);
                         wall.Click += (s, e) => label_Click_wall(wall, labelWallsYou);
 
@@ -129,14 +156,9 @@ namespace Quoridor_MVC.View
                     else
                     {
                         Label label = new Label();
-                        table.Controls.Add(label, i, j);
+                        tableLayoutPanel.Controls.Add(label, i, j);
                         horizontalWallArray[yHorizontalWall][i] = label;
                         verticalWallArray[yHorizontalLabel][j] = label;
-                        //label.BackColor = Color.Gray;
-                        //label.Dock = DockStyle.Fill;
-                        //label.Width = 15;
-                        //label.Height = 15;
-                        //label.Margin = Padding;
                         SetFormat(label, 15, Color.Gray);
                         yHorizontalWall++;
                     }
@@ -163,16 +185,17 @@ namespace Quoridor_MVC.View
             foreach (VertexLabel vertex in vertexes)
             {
                 vertex.Enabled = false;
-                if (vertex.isCharacter == false)
+                if (vertex.isCharacter == false || vertex.BackColor == Color.Orange)
                     vertex.BackColor = Color.White;
             }
 
         }
 
         //Кнопка СТАРТ
-        public void Button1_Click(TableLayoutPanel table, Button buttonWall, Button button1, Label labelWallsYou, Label labelWallsEnemy1, Label labelWallsEnemy2, Label labelWallsEnemy3, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3)
+        public void Button1_Click(Button buttonWall, Button button1, Label labelWallsYou, Label labelWallsEnemy2, Label labelWallsEnemy3, RadioButton radioButton1, RadioButton radioButton2, RadioButton radioButton3)
         {
-
+            labelWallsEnemy.Visible = true;
+            tableLayoutPanel.Visible = true;
             radioButton1.Visible = false;
             radioButton2.Visible = false;
             radioButton3.Visible = false;
@@ -181,28 +204,28 @@ namespace Quoridor_MVC.View
             if (radioButton3.Checked == true)
             {
                 count = 4;
-                labelWallsEnemy1.Text = "Enemy Orange walls: 10";
+                labelWallsEnemy.Text = "Enemy Orange walls: 10";
                 labelWallsEnemy2.Text = "Enemy Coral walls: 10";
                 labelWallsEnemy3.Text = "Enemy Crimson walls: 10";
             }
             else if (radioButton2.Checked == true)
             {
                 count = 3;
-                labelWallsEnemy1.Text = "Enemy Orange walls: 10";
+                labelWallsEnemy.Text = "Enemy Orange walls: 10";
                 labelWallsEnemy2.Text = "Enemy Coral walls: 10";
             }
             else
             {
                 count = 2;
-                labelWallsEnemy1.Text = "Enemy Orange walls: 10";
+                labelWallsEnemy.Text = "Enemy Orange walls: 10";
             }
 
-            gameRouter = new GameRouter(table, 8, count);
+            gameRouter = new GameRouter(tableLayoutPanel, 8, count);
 
             SetCharacterStart();
-            
+
             //CanMove(vertexLabelList1[x][y]);
-            table.Visible = true;
+            tableLayoutPanel.Visible = true;
             buttonWall.Enabled = true;
             buttonWall.Visible = true;
             button1.Visible = false;
@@ -234,17 +257,20 @@ namespace Quoridor_MVC.View
                 if (character is Player)
                 {
                     vertexLabelList1[character.CurrentPosition.x][character.CurrentPosition.y].BackColor = Color.Green;
-                }
-                else
+                } else
                 {
-                    vertexLabelList1[character.CurrentPosition.x][character.CurrentPosition.y].BackColor = enemyColors[i++];
+                    character.oleja = this;
                 }
+               
 
                 vertexLabelList1[character.CurrentPosition.x][character.CurrentPosition.y].isCharacter = true;
             }
 
             if (!(characters[0] is Player))
+            {
                 gameRouter.gameActivities.ActionOfAI();
+            }
+            SetEnemy();
 
             SetInteractiveLabels();
         }
@@ -254,8 +280,8 @@ namespace Quoridor_MVC.View
         {
            foreach (Coords coord in gameRouter.GetPlayerEdges())
            {
-                vertexLabelList1[coord.y][coord.x].BackColor = Color.GreenYellow;
-                vertexLabelList1[coord.y][coord.x].Enabled = true;
+                vertexLabelList1[coord.x][coord.y].BackColor = Color.GreenYellow;
+                vertexLabelList1[coord.x][coord.y].Enabled = true;
            }
         }
 
@@ -269,12 +295,30 @@ namespace Quoridor_MVC.View
                     gameRouter.gameActivities.GetActiveCharacter().CurrentPosition.y, vertex);
                 //Сделать все лейблы неинтерактивными
                 SetDefaultLabels();
-                //Действия ИИ
+                //Действия бэка
                 gameRouter.HandleAction((currentVertex.position, vertex.position));
-
-                //Установка интерактивных ячеек
+                //перерисовка противника и установка лейблов для взаимодействия
+                PrepareNextMove();
                 SetInteractiveLabels();
+
             }
+        }
+
+        private void PrepareNextMove()
+        {
+            //wallSpend = false;
+            //buttonWall.Text = "Wall";
+
+            SetEnemy();
+            //Установка интерактивных ячеек
+        }
+
+        //Установить врога
+        private void SetEnemy()
+        {
+            var c = gameRouter.GetCharacters();
+            Coords one = c[1].CurrentPosition;
+            vertexLabelList1[one.x][one.y].BackColor = Color.Orange;
         }
 
         //Переставить персонажа
@@ -298,7 +342,7 @@ namespace Quoridor_MVC.View
                 wall.MouseLeave -= (s, e) => label_mouse_leave_wall(wall);
                 SpendWall(wall);
                 labelWallsYou.Text = "You walls: " + walls;
-
+                
             }
         }
 
@@ -319,7 +363,7 @@ namespace Quoridor_MVC.View
                 LeaveWall(wall);
             }
         }
-
+      
         //Кнопка установить стену клик
         public void ButtonSpendWall_Click(object sender, EventArgs e)
         {
@@ -328,6 +372,7 @@ namespace Quoridor_MVC.View
                 wallSpend = true;
                 buttonWall.Text = "Cancel wall";
                 SetDefaultLabels();
+                SetEnemy();
             }
             else
             {
@@ -340,6 +385,7 @@ namespace Quoridor_MVC.View
         //Установить стену. Вызывается в установить стену клик
         public  void SpendWall(WallLabel wall)
         {
+
             int xWall = -1, yWall = -1;
 
             for (int i = 0; i < verticalWallArray.GetLength(0); i++)
@@ -362,16 +408,37 @@ namespace Quoridor_MVC.View
             if (yWall != -1)
             {
                 if(xWall+2<verticalWallArray[yWall].Length)
-                { 
+                {
+                    bool canDo = gameRouter.IsWallPlacable(((vertexLabelList1[yWall][xWall / 2].position, vertexLabelList1[yWall + 1][xWall / 2].position),
+                        (vertexLabelList1[yWall][xWall / 2 + 1].position,  vertexLabelList1[yWall + 1][xWall / 2 + 1].position)));
 
-                    verticalWallArray[yWall][xWall].Visible = false;
-                    verticalWallArray[yWall][xWall + 1].Enabled = false;
-                    verticalWallArray[yWall][xWall + 2].Visible = false;
-                    verticalWallArray[yWall][xWall].BackColor = Color.Black;
-                    verticalWallArray[yWall][xWall + 1].BackColor = Color.Black;
-                    verticalWallArray[yWall][xWall + 2].BackColor = Color.Black;
+                    //Олег чекай
 
-                    walls--;
+
+                    bool cando2 = gameRouter.gameActivities.OlegChek(((vertexLabelList1[yWall][xWall / 2].position, vertexLabelList1[yWall + 1][xWall / 2].position),
+                        (vertexLabelList1[yWall][xWall / 2 + 1].position, vertexLabelList1[yWall + 1][xWall / 2 + 1].position)));
+                  
+                    if (canDo && cando2)
+                    {
+
+                        verticalWallArray[yWall][xWall].Visible = false;
+                        verticalWallArray[yWall][xWall + 1].Enabled = false;
+                        verticalWallArray[yWall][xWall + 2].Visible = false;
+                        verticalWallArray[yWall][xWall].BackColor = Color.Black;
+                        verticalWallArray[yWall][xWall + 1].BackColor = Color.Black;
+                        verticalWallArray[yWall][xWall + 2].BackColor = Color.Black;
+
+                        walls--;
+                        buttonWall.Text = "Wall";
+                        wallSpend = false;
+
+                        gameRouter.HandleAction(((vertexLabelList1[yWall][xWall / 2].position, vertexLabelList1[yWall + 1][xWall / 2].position),
+                        (vertexLabelList1[yWall][xWall / 2 + 1].position, vertexLabelList1[yWall + 1][xWall / 2 + 1].position)));
+                        SetDefaultLabels();
+                        PrepareNextMove();
+                        SetInteractiveLabels();
+                    }
+                    
                 }
             }
             else
@@ -396,15 +463,33 @@ namespace Quoridor_MVC.View
 
                 if (xWall + 2 < horizontalWallArray[yWall].Length)
                 {
-                    horizontalWallArray[yWall][xWall].Visible = false;
-                    horizontalWallArray[yWall][xWall + 1].Enabled = false;
-                    horizontalWallArray[yWall][xWall + 2].Visible = false;
-                    horizontalWallArray[yWall][xWall].BackColor = Color.Black;
-                    horizontalWallArray[yWall][xWall + 1].BackColor = Color.Black;
-                    horizontalWallArray[yWall][xWall + 2].BackColor = Color.Black;
-                    walls--;
+                    bool canDo = gameRouter.IsWallPlacable(((vertexLabelList1[xWall / 2][yWall].position, vertexLabelList1[xWall / 2][yWall + 1].position),
+                           (vertexLabelList1[xWall / 2 + 1][yWall].position, vertexLabelList1[xWall / 2 + 1][yWall + 1].position)));
+                    //Олег чекай
+                    bool cando2 = gameRouter.gameActivities.OlegChek(((vertexLabelList1[xWall / 2][yWall].position, vertexLabelList1[xWall / 2][yWall + 1].position),
+       (vertexLabelList1[xWall / 2 + 1][yWall].position, vertexLabelList1[xWall / 2 + 1][yWall + 1].position)));
+
+                    if (canDo && cando2)
+                    {
+                        horizontalWallArray[yWall][xWall].Visible = false;
+                        horizontalWallArray[yWall][xWall + 1].Enabled = false;
+                        horizontalWallArray[yWall][xWall + 2].Visible = false;
+                        horizontalWallArray[yWall][xWall].BackColor = Color.Black;
+                        horizontalWallArray[yWall][xWall + 1].BackColor = Color.Black;
+                        horizontalWallArray[yWall][xWall + 2].BackColor = Color.Black;
+                        walls--;
+                        buttonWall.Text = "Wall";
+                        wallSpend = false;
+                        gameRouter.HandleAction(((vertexLabelList1[xWall / 2][yWall].position, vertexLabelList1[xWall / 2][yWall + 1].position),
+       (vertexLabelList1[xWall / 2 + 1][yWall].position, vertexLabelList1[xWall / 2 + 1][yWall + 1].position)));
+                        SetDefaultLabels();
+                        PrepareNextMove();
+                        SetInteractiveLabels();
+                    }
+
                 }
             }
+            
         }
 
         //Закрашивает стену при наведении

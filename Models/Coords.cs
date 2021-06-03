@@ -1,6 +1,9 @@
-﻿namespace Quoridor_MVC.Models
+﻿
+using System;
+
+namespace Quoridor_MVC.Models
 {
-    sealed public class Coords
+    sealed public class Coords : ICloneable
     {
         public int x { get; private set; }
         public int y { get; private set; }
@@ -10,6 +13,11 @@
         {
             this.x = x;
             this.y = y;
+        }
+
+        public object Clone()
+        {
+            return new Coords(this.x, this.y);
         }
     }
 
